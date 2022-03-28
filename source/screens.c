@@ -39,7 +39,7 @@ uint_fast8_t getMaxTwoDigitNumber (const char* prompt, uint_fast8_t max) {
 
 uint_fast16_t getDayNumber () {
     do {
-        puts("How many days has\nit been since\nJune 19th, 2021\nin the UTC timezone?");
+        puts("How many days has\nit been since\nJune 19th, 2021?\n");
         gets(getsInput);
         uint_fast8_t len = strlen(getsInput);
         if (len) {
@@ -62,14 +62,14 @@ uint_fast16_t getDayNumber () {
 
 void timeScreen (void) {
     do {
-        uint_fast8_t hourValue = getMaxTwoDigitNumber("What hour is it\nin the UTC timezone?(0-23)\n", 23);
+        uint_fast8_t hourValue = getMaxTwoDigitNumber("What hour is it?\n(0-23)\n", 23);
         cls();
-        uint_fast8_t minuteValue = getMaxTwoDigitNumber("What minute is it\nin the UTC timezone?(0-59)\n", 59);
+        uint_fast8_t minuteValue = getMaxTwoDigitNumber("What minute is it?\n(0-59)\n", 59);
         cls();
 
         formatTwoDigitNumber(hourValue, getsInput);
         formatTwoDigitNumber(minuteValue, getsInput + 3);
-        printf("So, it's about\n%s:%s\nin the UTC timezone?\n\nA: Confirm\nB: Revise", getsInput, getsInput + 3);
+        printf("So, it's about\n%s:%s?\n\nA: Confirm\nB: Revise", getsInput, getsInput + 3);
         uint_fast8_t padState = waitpad(J_A | J_B);
         cls();
         if (padState & J_A) {

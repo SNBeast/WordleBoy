@@ -58,7 +58,7 @@ int main (void) {
                         *(uint8_t*)save = 0; // the beginning of main will do the rest
                         cls();
                         puts("Save deleted.");
-                        delay(5000);
+                        delay(4000);
                     }
                 }
                 cls();
@@ -69,7 +69,7 @@ int main (void) {
                 uint_fast16_t hoursMinutes = readTime();
                 formatTwoDigitNumber(hoursMinutes >> 8, time);
                 formatTwoDigitNumber(hoursMinutes & 0xFF, time + 3);
-                printf("Set UTC time is\n%s:%s\n\n", time, time + 3);
+                printf("Set time is\n%s:%s\n\n", time, time + 3);
                 printf("Set Wordle index is\n%u\n\nLeft: Set time\nRight: Set day\nB: Back", save->lastDayBooted);
                 
                 padState = waitpad(J_LEFT | J_RIGHT | J_B);
