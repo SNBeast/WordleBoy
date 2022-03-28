@@ -1,0 +1,10 @@
+.vscode/
+objects/
+*.gb
+*.ihx
+*.cdb
+*.adb
+*.noi
+*.map
+*.sym
+*.sav
