@@ -28,9 +28,11 @@ int main (void) {
             uint16_t dayCounterAndRTCControl = readDayCounterAndRTCControl();
             if (dayCounterAndRTCControl & 0x8000) {
                 dateScreen();
+                writeZeroDays();
             }
             else if (dayCounterAndRTCControl) {
                 save->lastDayBooted = (save->lastDayBooted + dayCounterAndRTCControl) % DAILY_WORD_COUNT;
+                writeZeroDays();
             }
 
             if (save->lastDayBooted != save->lastDayPlayed) {
