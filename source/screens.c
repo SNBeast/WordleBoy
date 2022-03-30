@@ -10,6 +10,18 @@
 
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 
+const char* invalidInput = "Invalid input.";
+const char* howManyDays = "How many days has\nit been since\nJune 19th, 2021?\n";
+const char* whatHourIsIt = "What hour is it?\n(0-23)\n";
+const char* whatMinuteIsIt = "What minute is it?\n(0-59)\n";
+const char* soItsAbout = "So, it's about\n%s:%s?\n\nA: Confirm\nB: Revise";
+const char* soWordleIndex = "So, Wordle index\n%u?\n\nA: Confirm\nB: Revise";
+const char* playedWinPercentage = "\n%u Played\n%u Win Percentage";
+const char* currentMaxStreak = "\n%u Current Streak\n%u Max Streak";
+const char* oneTwoThree = "\n1: %u\n2: %u\n3: %u";
+const char* fourFiveSix = "\n4: %u\n5: %u\n6: %u";
+const char* twoStrings = "%s  %s\n";
+
 char getsInput[GETS_LENGTH] = {0};
 
 uint_fast8_t getMaxTwoDigitNumber (const char* prompt, uint_fast8_t max) {
@@ -33,13 +45,13 @@ uint_fast8_t getMaxTwoDigitNumber (const char* prompt, uint_fast8_t max) {
             }
         }
         cls();
-        puts("Invalid input.");
+        puts(invalidInput);
     } while (true);
 }
 
 uint_fast16_t getDayNumber () {
     do {
-        puts("How many days has\nit been since\nJune 19th, 2021?\n");
+        puts(howManyDays);
         gets(getsInput);
         uint_fast8_t len = strlen(getsInput);
         if (len) {
@@ -51,25 +63,25 @@ uint_fast16_t getDayNumber () {
                 }
             }
             if (!continueCondition) {
-                uint_fast32_t returnValue = atol(getsInput); // atoi advertises returning an "int" but can only handle one byte instead of two, so this'll probably fail before it should too, and there's no unsigned variant
+                uint_fast32_t returnValue = atol(getsInput); // atoi advertises returning an int but can only handle one byte instead of two, so this'll probably fail before it should too, and there's no unsigned variant
                 return returnValue % DAILY_WORD_COUNT;
             }
         }
         cls();
-        puts("Invalid input.");
+        puts(invalidInput);
     } while (true);
 }
 
 void timeScreen (void) {
     do {
-        uint_fast8_t hourValue = getMaxTwoDigitNumber("What hour is it?\n(0-23)\n", 23);
+        uint_fast8_t hourValue = getMaxTwoDigitNumber(whatHourIsIt, 23);
         cls();
-        uint_fast8_t minuteValue = getMaxTwoDigitNumber("What minute is it?\n(0-59)\n", 59);
+        uint_fast8_t minuteValue = getMaxTwoDigitNumber(whatMinuteIsIt, 59);
         cls();
 
         formatTwoDigitNumber(hourValue, getsInput);
         formatTwoDigitNumber(minuteValue, getsInput + 3);
-        printf("So, it's about\n%s:%s?\n\nA: Confirm\nB: Revise", getsInput, getsInput + 3);
+        printf(soItsAbout, getsInput, getsInput + 3);
         uint_fast8_t padState = waitpad(J_A | J_B);
         cls();
         if (padState & J_A) {
@@ -84,7 +96,7 @@ void dateScreen (void) {
         uint_fast16_t dayNumber = getDayNumber();
         cls();
 
-        printf("So, Wordle index\n%u?\n\nA: Confirm\nB: Revise", dayNumber);
+        printf(soWordleIndex, dayNumber);
         uint_fast8_t padState = waitpad(J_A | J_B);
         cls();
         if (padState & J_A) {
@@ -97,16 +109,16 @@ void dateScreen (void) {
 
 // this will have gameScreen's graphics still on it
 void resultScreen (void) {
-    printf("\n%u Played\n%u Win Percentage", save->totalPlayed, ((uint32_t)(save->totalWins) * 100)/save->totalPlayed);
-    printf("\n%u Current Streak\n%u Max Streak", save->currentStreak, save->maxStreak);
-    printf("\n1: %u\n2: %u\n3: %u", save->scoreCounts[0], save->scoreCounts[1], save->scoreCounts[2]);
-    printf("\n4: %u\n5: %u\n6: %u", save->scoreCounts[3], save->scoreCounts[4], save->scoreCounts[5]);
+    printf(playedWinPercentage, save->totalPlayed, ((uint32_t)(save->totalWins) * 100)/save->totalPlayed);
+    printf(currentMaxStreak, save->currentStreak, save->maxStreak);
+    printf(oneTwoThree, save->scoreCounts[0], save->scoreCounts[1], save->scoreCounts[2]);
+    printf(fourFiveSix, save->scoreCounts[3], save->scoreCounts[4], save->scoreCounts[5]);
 }
 
 void gameScreen (void) {
     do {
         for (int i = 0; i < 6; i++) {
-            printf("%s  %s\n", save->guesses[i], save->guessQualities[i]);
+            printf(twoStrings, save->guesses[i], save->guessQualities[i]);
         }
         if (save->finished && save->currentStreak == 0) {
             puts(getDailyWord());

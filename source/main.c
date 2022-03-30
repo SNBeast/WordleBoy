@@ -6,6 +6,12 @@
 #include <stdio.h>
 
 const char* magic = "WORDLEBOY";
+const char* initialDeletePrompt = "Delete save data?\n\nDOWN: Yes\nB: No";
+const char* finalDeletePrompt = "Are you sure you\nwant to delete your\nsave data?\n\nSTART: Yes\nB: No";
+const char* saveDeleted = "Save deleted.";
+const char* setTimeIs = "Set time is\n%s:%s\n\n";
+const char* setWordleIndexIs = "Set Wordle index is\n%u\n\nLeft: Set time\nRight: Set day\nB: Back";
+const char* isItTheNextDay = "Is it the next day?\n\nA: Yes\nB: No";
 
 char time[6] = {0};
 
@@ -50,16 +56,16 @@ int main (void) {
             uint8_t padState = waitpad(J_SELECT);
             if ((padState & J_UP) && (padState & J_A)) {
                 cls();
-                puts("Delete save data?\n\nDOWN: Yes\nB: No");
+                puts(initialDeletePrompt);
                 padState = waitpad(J_DOWN | J_B);
                 if (padState & J_DOWN) {
                     cls();
-                    puts("Are you sure you\nwant to delete your\nsave data?\n\nSTART: Yes\nB: No");
+                    puts(finalDeletePrompt);
                     padState = waitpad(J_START | J_B);
                     if (padState & J_START) {
                         *(uint8_t*)save = 0; // the beginning of main will do the rest
                         cls();
-                        puts("Save deleted.");
+                        puts(saveDeleted);
                         delay(4000);
                     }
                 }
@@ -71,8 +77,8 @@ int main (void) {
                 uint_fast16_t hoursMinutes = readTime();
                 formatTwoDigitNumber(hoursMinutes >> 8, time);
                 formatTwoDigitNumber(hoursMinutes & 0xFF, time + 3);
-                printf("Set time is\n%s:%s\n\n", time, time + 3);
-                printf("Set Wordle index is\n%u\n\nLeft: Set time\nRight: Set day\nB: Back", save->lastDayBooted);
+                printf(setTimeIs, time, time + 3);
+                printf(setWordleIndexIs, save->lastDayBooted);
                 
                 padState = waitpad(J_LEFT | J_RIGHT | J_B);
                 if (padState & J_LEFT) {
@@ -80,7 +86,7 @@ int main (void) {
                     timeScreen();
                     if (hoursMinutes > readTime()) {
                         cls();
-                        puts("Is it the next day?\n\nA: Yes\nB: No");
+                        puts(isItTheNextDay);
                         padState = waitpad(J_A | J_B);
                         if (padState & J_A) {
                             save->lastDayBooted = (save->lastDayBooted + 1) % DAILY_WORD_COUNT;
