@@ -53,15 +53,15 @@ int main (void) {
         gameScreen();
     
         do {
-            uint8_t padState = waitpad(J_SELECT);
+            uint8_t padState = my_waitpad(J_SELECT);
             if ((padState & J_UP) && (padState & J_A)) {
                 cls();
                 puts(initialDeletePrompt);
-                padState = waitpad(J_DOWN | J_B);
+                padState = my_waitpad(J_DOWN | J_B);
                 if (padState & J_DOWN) {
                     cls();
                     puts(finalDeletePrompt);
-                    padState = waitpad(J_START | J_B);
+                    padState = my_waitpad(J_START | J_B);
                     if (padState & J_START) {
                         *(uint8_t*)save = 0; // the beginning of main will do the rest
                         cls();
@@ -80,14 +80,14 @@ int main (void) {
                 printf(setTimeIs, time, time + 3);
                 printf(setWordleIndexIs, save->lastDayBooted);
                 
-                padState = waitpad(J_LEFT | J_RIGHT | J_B);
+                padState = my_waitpad(J_LEFT | J_RIGHT | J_B);
                 if (padState & J_LEFT) {
                     cls();
                     timeScreen();
                     if (hoursMinutes > readTime()) {
                         cls();
                         puts(isItTheNextDay);
-                        padState = waitpad(J_A | J_B);
+                        padState = my_waitpad(J_A | J_B);
                         if (padState & J_A) {
                             save->lastDayBooted = (save->lastDayBooted + 1) % DAILY_WORD_COUNT;
                         }

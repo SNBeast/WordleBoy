@@ -82,7 +82,7 @@ void timeScreen (void) {
         formatTwoDigitNumber(hourValue, getsInput);
         formatTwoDigitNumber(minuteValue, getsInput + 3);
         printf(soItsAbout, getsInput, getsInput + 3);
-        uint_fast8_t padState = waitpad(J_A | J_B);
+        uint_fast8_t padState = my_waitpad(J_A | J_B);
         cls();
         if (padState & J_A) {
             writeTime(hourValue, minuteValue);
@@ -97,7 +97,7 @@ void dateScreen (void) {
         cls();
 
         printf(soWordleIndex, dayNumber);
-        uint_fast8_t padState = waitpad(J_A | J_B);
+        uint_fast8_t padState = my_waitpad(J_A | J_B);
         cls();
         if (padState & J_A) {
             save->lastDayBooted = dayNumber;

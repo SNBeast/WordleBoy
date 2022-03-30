@@ -5,6 +5,9 @@
 
 #define DAILY_WORD_COUNT 2309
 
+// this implementation HALTs instead of making the CPU go brrr
+uint8_t my_waitpad (uint8_t mask);
+
 void letterGuessQualitiesToChars (enum LetterGuessQuality* qualities, char* output);
 
 void formatTwoDigitNumber (uint_fast8_t number, char* place);

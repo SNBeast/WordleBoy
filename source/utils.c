@@ -1,6 +1,17 @@
 #include "utils.h"
 #include "words.h"
 
+uint8_t my_waitpad (uint8_t mask) {
+    uint8_t padState;
+    do {
+        padState = joypad();
+        if (padState & mask) {
+            return padState;
+        }
+        __asm__("halt");
+    } while (true);
+}
+
 void letterGuessQualitiesToChars (enum LetterGuessQuality* qualities, char* output) {
     for (uint_fast8_t i = 0; i < 5; i++) {
         switch (qualities[i]) {
